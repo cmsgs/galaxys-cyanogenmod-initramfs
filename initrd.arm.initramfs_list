@@ -1,0 +1,86 @@
+#####################
+# /home/leshak/i9000/initramfs/
+# Last modified: 1277191846.0517477270
+
+dir /sys 755 0 0
+file /sys/stgloc /home/leshak/i9000/initramfs/sys/stgloc 644 0 0
+file /system.prop /home/leshak/i9000/initramfs/system.prop 755 0 0
+file /init.rc /home/leshak/i9000/initramfs/init.rc 755 0 0
+slink /etc system/etc 777 0 0
+file /init.smdkc110.rc /home/leshak/i9000/initramfs/init.smdkc110.rc 755 0 0
+file /init.smdkc110.sh /home/leshak/i9000/initramfs/init.smdkc110.sh 755 0 0
+dir /proc 755 0 0
+file /proc/stgloc /home/leshak/i9000/initramfs/proc/stgloc 644 0 0
+file /initrd.arm.initramfs_list /home/leshak/i9000/initramfs/initrd.arm.initramfs_list 644 0 0
+dir /mnt 755 0 0
+dir /mnt/.lfs 755 0 0
+file /mnt/.lfs/test /home/leshak/i9000/initramfs/mnt/.lfs/test 644 0 0
+dir /sbin 755 0 0
+file /sbin/su /home/leshak/i9000/initramfs/sbin/su 4755 0 0
+file /sbin/ffdisk /home/leshak/i9000/initramfs/sbin/ffdisk 755 0 0
+file /sbin/fdump /home/leshak/i9000/initramfs/sbin/fdump 755 0 0
+file /sbin/init /home/leshak/i9000/initramfs/sbin/init 755 0 0
+file /sbin/dfta.sh /home/leshak/i9000/initramfs/sbin/dfta.sh 755 0 0
+file /sbin/fat.format /home/leshak/i9000/initramfs/sbin/fat.format 755 0 0
+file /sbin/recovery /home/leshak/i9000/initramfs/sbin/recovery 755 0 0
+file /sbin/devmgr /home/leshak/i9000/initramfs/sbin/devmgr 755 0 0
+file /sbin/dfta /home/leshak/i9000/initramfs/sbin/dfta 755 0 0
+file /sbin/ferase /home/leshak/i9000/initramfs/sbin/ferase 755 0 0
+dir /sbin/images 755 0 0
+file /sbin/images/icon.png /home/leshak/i9000/initramfs/sbin/images/icon.png 755 0 0
+file /sbin/redbend_ua /home/leshak/i9000/initramfs/sbin/redbend_ua 755 0 0
+file /sbin/adbd /home/leshak/i9000/initramfs/sbin/adbd 755 0 0
+slink /init sbin/init 777 0 0
+dir /lib 755 0 0
+dir /lib/modules 755 0 0
+file /lib/modules/j4fs.ko /home/leshak/i9000/initramfs/lib/modules/j4fs.ko 644 0 0
+file /lib/modules/scsi_wait_scan.ko /home/leshak/i9000/initramfs/lib/modules/scsi_wait_scan.ko 644 0 0
+file /lib/modules/pvrsrvkm.ko /home/leshak/i9000/initramfs/lib/modules/pvrsrvkm.ko 644 0 0
+file /lib/modules/drop_caches.ko /home/leshak/i9000/initramfs/lib/modules/drop_caches.ko 644 0 0
+file /lib/modules/s3c_bc.ko /home/leshak/i9000/initramfs/lib/modules/s3c_bc.ko 644 0 0
+file /lib/modules/fsr.ko /home/leshak/i9000/initramfs/lib/modules/fsr.ko 644 0 0
+file /lib/modules/vibrator.ko /home/leshak/i9000/initramfs/lib/modules/vibrator.ko 644 0 0
+file /lib/modules/fsr_stl.ko /home/leshak/i9000/initramfs/lib/modules/fsr_stl.ko 644 0 0
+file /lib/modules/multipdp.ko /home/leshak/i9000/initramfs/lib/modules/multipdp.ko 644 0 0
+file /lib/modules/s3c_lcd.ko /home/leshak/i9000/initramfs/lib/modules/s3c_lcd.ko 644 0 0
+file /lib/modules/dhd.ko /home/leshak/i9000/initramfs/lib/modules/dhd.ko 644 0 0
+file /lib/modules/Si4709_driver.ko /home/leshak/i9000/initramfs/lib/modules/Si4709_driver.ko 644 0 0
+file /lib/modules/stgloc /home/leshak/i9000/initramfs/lib/modules/stgloc 644 0 0
+file /lib/modules/rfs_glue.ko /home/leshak/i9000/initramfs/lib/modules/rfs_glue.ko 644 0 0
+file /lib/modules/rfs_fat.ko /home/leshak/i9000/initramfs/lib/modules/rfs_fat.ko 644 0 0
+file /lib/modules/dpram.ko /home/leshak/i9000/initramfs/lib/modules/dpram.ko 644 0 0
+file /lib/modules/param.ko /home/leshak/i9000/initramfs/lib/modules/param.ko 644 0 0
+file /fota.rc /home/leshak/i9000/initramfs/fota.rc 755 0 0
+dir /res 755 0 0
+dir /res/images 755 0 0
+file /res/images/progress_bar_empty_right_round.png /home/leshak/i9000/initramfs/res/images/progress_bar_empty_right_round.png 755 0 0
+file /res/images/progress_bar_empty.png /home/leshak/i9000/initramfs/res/images/progress_bar_empty.png 755 0 0
+file /res/images/indeterminate6.png /home/leshak/i9000/initramfs/res/images/indeterminate6.png 755 0 0
+file /res/images/indeterminate1.png /home/leshak/i9000/initramfs/res/images/indeterminate1.png 755 0 0
+file /res/images/indeterminate2.png /home/leshak/i9000/initramfs/res/images/indeterminate2.png 755 0 0
+file /res/images/indeterminate3.png /home/leshak/i9000/initramfs/res/images/indeterminate3.png 755 0 0
+file /res/images/icon_error.png /home/leshak/i9000/initramfs/res/images/icon_error.png 755 0 0
+file /res/images/indeterminate4.png /home/leshak/i9000/initramfs/res/images/indeterminate4.png 755 0 0
+file /res/images/progress_bar_left_round.png /home/leshak/i9000/initramfs/res/images/progress_bar_left_round.png 755 0 0
+file /res/images/icon_firmware_install.png /home/leshak/i9000/initramfs/res/images/icon_firmware_install.png 755 0 0
+file /res/images/progress_bar_right_round.png /home/leshak/i9000/initramfs/res/images/progress_bar_right_round.png 755 0 0
+file /res/images/indeterminate5.png /home/leshak/i9000/initramfs/res/images/indeterminate5.png 755 0 0
+file /res/images/icon_installing.png /home/leshak/i9000/initramfs/res/images/icon_installing.png 755 0 0
+file /res/images/icon_firmware_error.png /home/leshak/i9000/initramfs/res/images/icon_firmware_error.png 755 0 0
+file /res/images/progress_bar_empty_left_round.png /home/leshak/i9000/initramfs/res/images/progress_bar_empty_left_round.png 755 0 0
+file /res/images/progress_bar_fill.png /home/leshak/i9000/initramfs/res/images/progress_bar_fill.png 755 0 0
+dir /dev 755 0 0
+file /dev/stgloc /home/leshak/i9000/initramfs/dev/stgloc 644 0 0
+file /recovery.rc /home/leshak/i9000/initramfs/recovery.rc 755 0 0
+dir /tmp 755 0 0
+file /tmp/s3c-keypad.kl /home/leshak/i9000/initramfs/tmp/s3c-keypad.kl 755 0 0
+dir /tmp/bootchart 755 0 0
+file /tmp/bootchart/stgloc /home/leshak/i9000/initramfs/tmp/bootchart/stgloc 644 0 0
+file /tmp/s3c-keypad.kcm.bin /home/leshak/i9000/initramfs/tmp/s3c-keypad.kcm.bin 666 0 0
+file /lpm.rc /home/leshak/i9000/initramfs/lpm.rc 755 0 0
+dir /.info 755 0 0
+file /.info/rootfs.info /home/leshak/i9000/initramfs/.info/rootfs.info 644 0 0
+dir /system 755 0 0
+dir /system/etc 755 0 0
+file /system/etc/ld.so.cache /home/leshak/i9000/initramfs/system/etc/ld.so.cache 644 0 0
+file /default.prop /home/leshak/i9000/initramfs/default.prop 755 0 0
