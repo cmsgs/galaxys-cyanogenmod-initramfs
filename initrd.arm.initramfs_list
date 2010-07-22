@@ -1,23 +1,23 @@
-dir .info 755 0 0
-dir data 755 0 0
-dir dev 755 0 0
-dir etc 755 0 0
-dir lib 755 0 0
-dir lib/modules 755 0 0
-dir mnt 755 0 0
-dir mnt/.lfs 755 0 0
-dir proc 755 0 0
-dir res 755 0 0
-dir res/images 755 0 0
-dir sbin 755 0 0
-dir sbin/images 755 0 0
-dir sd-ext 755 0 0
-dir sys 755 0 0
-dir system 755 0 0
-dir system/bin 755 0 0
-dir system/etc 755 0 0
-dir tmp 755 0 0
-dir tmp/bootchart 755 0 0
+dir /.info 755 0 0
+dir /data 755 0 0
+dir /dev 755 0 0
+dir /etc 755 0 0
+dir /lib 755 0 0
+dir /lib/modules 755 0 0
+dir /mnt 755 0 0
+dir /mnt/.lfs 755 0 0
+dir /proc 755 0 0
+dir /res 755 0 0
+dir /res/images 755 0 0
+dir /sbin 755 0 0
+dir /sbin/images 755 0 0
+dir /sd-ext 755 0 0
+dir /sys 755 0 0
+dir /system 755 0 0
+dir /system/bin 755 0 0
+dir /system/etc 755 0 0
+dir /tmp 755 0 0
+dir /tmp/bootchart 755 0 0
 file /.info/rootfs.info /Volumes/Data/GalaxyS/i9000-leshak-initramfs/.info/rootfs.info 666 0 0
 file /default.prop /Volumes/Data/GalaxyS/i9000-leshak-initramfs/default.prop 777 0 0
 file /dev/stgloc /Volumes/Data/GalaxyS/i9000-leshak-initramfs/dev/stgloc 666 0 0
