@@ -1,6 +1,5 @@
 dir /.info 755 0 0
 dir /dev 755 0 0
-dir /etc 755 0 0
 dir /lib 755 0 0
 dir /lib/modules 755 0 0
 dir /mnt 755 0 0
