@@ -1,5 +1,4 @@
 dir /.info 755 0 0
-dir /data 755 0 0
 dir /dev 755 0 0
 dir /etc 755 0 0
 dir /lib 755 0 0
@@ -14,7 +13,6 @@ dir /sbin/images 755 0 0
 dir /sd-ext 755 0 0
 dir /sys 755 0 0
 dir /system 755 0 0
-dir /system/bin 755 0 0
 dir /system/etc 755 0 0
 dir /tmp 755 0 0
 dir /tmp/bootchart 755 0 0
