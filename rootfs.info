@@ -1,0 +1,9 @@
+[PLATFORM_INFO]
+platform_name = Android;
+platform_hw = T959 rev05;
+[COMPILE_INFO]
+compile_time = 2010-06-22 20:03:20;
+compiled_by  = jaeyoon.yoon;
+compile_host = sep-05;
+compiler_version = arm-linux-gcc (for S3C64XX Samsung Electronics AP Development Team) 4.3.1;
+busybox_version = busybox;

@@ -14,7 +14,7 @@ on init
  
 	insmod /lib/modules/param.ko 
 	insmod /lib/modules/vibrator.ko
- 
+	 
   	mount rfs /dev/block/stl9 /system check=no
 
 on boot
@@ -32,12 +32,12 @@ service console /system/bin/sh
 	console
 
 service playlpm /system/bin/playlpm
-    	user root
-	oneshot  
+    user root
+    oneshot  
 
 service immvibed /system/bin/immvibed 
 	oneshot
 
 service lpmkey /system/bin/charging_mode
-    	user root
-    	oneshot
+    user root
+    oneshot

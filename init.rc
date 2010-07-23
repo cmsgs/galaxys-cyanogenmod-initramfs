@@ -124,6 +124,12 @@ loglevel 3
     chown system system /data
     chmod 0771 /data
    
+##    To Add the partition in Movinand of T959
+    mkdir /data_tmo
+    mount rfs /dev/block/mmcblk0p3 /data_tmo nosuid nodev check=no
+    chown system system /data_tmo
+    chmod 0771 /data_tmo
+   
 ###################################################################  
 
 ###################################################################    
@@ -146,7 +152,7 @@ chmod 0777 /dbdata/databases
     # This may have been created by the recovery system with odd permissions
     chown system system /cache/recovery
     chmod 0770 /cache/recovery
-
+    
     #change permissions on vmallocinfo so we can grab it from bugreports
     chown root log /proc/vmallocinfo
     chmod 0440 /proc/vmallocinfo
@@ -234,7 +240,7 @@ chmod 0777 /dbdata/databases
     mkdir /data/log  0777 root root 
     chmod 0777 /data/log
 	chmod 0777 /data/anr	
-    
+
     chmod 0666 /dev/log/radio
     chmod 0666 /dev/log/main
     chmod 0666 /dev/log/event    
@@ -242,7 +248,11 @@ chmod 0777 /dbdata/databases
    	# create dump camera
     mkdir /data/dump  0777 root root 
     chmod 0777 /data/dump
-
+	
+    # create fota delta dir
+    mkdir /data/fota 0777 root root
+    chmod 0777 /data/fota
+	
     # create dalvik-cache and double-check the perms
     mkdir /data/dalvik-cache 0771 system system
     chown system system /data/dalvik-cache
@@ -263,10 +273,28 @@ chmod 0777 /dbdata/databases
 
     #DRM directory creation
     mkdir /system/etc/security/drm 0777
-    chown root root /system/etc/security/drm
+    chown -R media /system/etc/security/drm
     chmod 0777 /system/etc/security/drm
     #Permission for WMDRM sample.hds file
     chmod 0777  /system/etc/security/drm/sample.hds
+    #permission for playready certificates
+
+	chmod 0777 /system/etc/security/drm/zprivsig.dat
+	chmod 0777 /system/etc/security/drm/zprivencr.dat
+	chmod 0777 /system/etc/security/drm/zgpriv.dat
+	chmod 0777 /system/etc/security/drm/unsignedtemplate.dat
+	chmod 0777 /system/etc/security/drm/ndrgpriv.dat
+	chmod 0777 /system/etc/security/drm/ndrpriv.dat
+	chmod 0777 /system/etc/security/drm/ndrcerttemplate.dat
+	chmod 0777 /system/etc/security/drm/devcerttemplate.dat
+	chmod 0777 /system/etc/security/drm/bgroupcert.dat
+	chmod 0777 /system/etc/security/drm/bDomainCertSecL0.dat
+	chmod 0777 /system/etc/security/drm/priv.dat
+
+	chmod 0777 /system/etc/security/drm/playready.hds
+    chmod 0777 /system/etc/security/drm/devcert.dat
+    chmod 0777 /system/etc/security/drm/bdevcert.dat
+	
    # Added for testing WMDRM and DIVX DRM
     mkdir /data/data/.drm/ 0777
     mkdir /data/data/.drm/.wmdrm 0777
@@ -284,7 +312,7 @@ chmod 0777 /dbdata/databases
     #insmod /modules/bc_example.ko
 
     # load FM Radio module
-    insmod /lib/modules/Si4709_driver.ko
+    #insmod /lib/modules/Si4709_driver.ko
     insmod /lib/modules/vibrator.ko
     insmod /lib/modules/melfas_touchkey.ko
 
@@ -316,14 +344,46 @@ on boot
 
 # Define the memory thresholds at which the above process classes will
 # be killed.  These numbers are in pages (4k).
-    setprop ro.FOREGROUND_APP_MEM 1536
-    setprop ro.VISIBLE_APP_MEM 2048
-    setprop ro.SECONDARY_SERVER_MEM 4096
-    setprop ro.BACKUP_APP_MEM 4096
-    setprop ro.HOME_APP_MEM 4096
-    setprop ro.HIDDEN_APP_MEM 5120
-    setprop ro.CONTENT_PROVIDER_MEM 5632
-    setprop ro.EMPTY_APP_MEM 6144
+
+# yjjung_20100621,  shift watermark value to be consistent with the google's original values. 
+    setprop ro.FOREGROUND_APP_MEM 4096
+    setprop ro.VISIBLE_APP_MEM 8192
+    setprop ro.SECONDARY_SERVER_MEM 14500
+    setprop ro.BACKUP_APP_MEM 14500
+    setprop ro.HOME_APP_MEM 14500
+    setprop ro.HIDDEN_APP_MEM 15000
+    setprop ro.CONTENT_PROVIDER_MEM 15500
+    setprop ro.EMPTY_APP_MEM 16000
+
+# yjjung_20100613,  higher the watermark of low priority activities.
+#    setprop ro.FOREGROUND_APP_MEM 3072
+#    setprop ro.VISIBLE_APP_MEM 4096
+#    setprop ro.SECONDARY_SERVER_MEM 8192
+#    setprop ro.BACKUP_APP_MEM 8192
+#    setprop ro.HOME_APP_MEM 8192
+#    setprop ro.HIDDEN_APP_MEM 14500
+#    setprop ro.CONTENT_PROVIDER_MEM 15000
+#    setprop ro.EMPTY_APP_MEM 15500
+
+# yjjung_20100524,  higher the watermark of each activiry priority.
+#    setprop ro.FOREGROUND_APP_MEM 3072
+#    setprop ro.VISIBLE_APP_MEM 4096
+#    setprop ro.SECONDARY_SERVER_MEM 8192
+#    setprop ro.BACKUP_APP_MEM 8192
+#    setprop ro.HOME_APP_MEM 8192
+#    setprop ro.HIDDEN_APP_MEM 10240
+#    setprop ro.CONTENT_PROVIDER_MEM 11264
+#    setprop ro.EMPTY_APP_MEM 12288
+
+#	previous S1 watermarks
+#    setprop ro.FOREGROUND_APP_MEM 1536
+#    setprop ro.VISIBLE_APP_MEM 2048
+#    setprop ro.SECONDARY_SERVER_MEM 4096
+#    setprop ro.BACKUP_APP_MEM 4096
+#    setprop ro.HOME_APP_MEM 4096
+#    setprop ro.HIDDEN_APP_MEM 5120
+#    setprop ro.CONTENT_PROVIDER_MEM 5632
+#    setprop ro.EMPTY_APP_MEM 6144
 
 # Write value must be consistent with the above properties.
 # Note that the driver only supports 6 slots, so we have HOME_APP at the
@@ -332,7 +392,13 @@ on boot
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 2048,4096,5120,5632,6144,7172 
+
+#	yjjung_20100524, doubling minfree, since sum of free, file will be compared with minfree
+#    write /sys/module/lowmemorykiller/parameters/minfree 4096,8192,10240,11264,12288,14344
+# yjjung_20100613,  higher the watermark of low priority activities.
+    write /sys/module/lowmemorykiller/parameters/minfree 4096,8192,14500,15000,15500,16000
+# 	previous S1 watermarks    
+#    write /sys/module/lowmemorykiller/parameters/minfree 2048,4096,5120,5632,6144,7172
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
@@ -394,7 +460,8 @@ on boot
     chown system system /dev/light
     chmod 0777 /dev/light
     chown system system /dev/proximity
-    chmod 0777 /dev/proximity
+   chmod 0777 /dev/proximity
+  chmod 0777 /dev/hac_miscdev
 
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
@@ -483,9 +550,14 @@ service ril-daemon /system/bin/rild
     user root
     group radio cache inet misc
     
-service glgps /system/bin/gpsd/glgps_samsungJupiter -c /system/etc/jupiter.xml
+#service glgps /system/bin/gpsd/glgps_samsungJupiter -c /system/etc/jupiter.xml
+#    user root
+#    group root
+
+#added for STE GPS
+service agpsd /system/bin/agpsd
     user root
-    group root
+    oneshot
 
 service DR-daemon /system/bin/drexe
     user root
@@ -499,7 +571,7 @@ service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-sys
     onrestart write /sys/power/state on
 
 service media /system/bin/mediaserver
-    user media root
+    user media
     group system audio camera graphics inet net_bt net_bt_admin
 
 #service bootsound /system/bin/playmp3
@@ -677,6 +749,6 @@ on property:service.dhcp.enable=0
 
 on property:service.iptables.configure=0
 	chmod 777 /data/data/com.android.samsung.IcsService/conf/iptablesFlush.sh
-	start pcInternet_off 
-	
+	start pcInternet_off
+	 
 #end of PCInternet share

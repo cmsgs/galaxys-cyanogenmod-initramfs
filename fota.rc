@@ -1,82 +1,65 @@
-
 on init
 
-sysclktz 0
+# GyuTae FIX : we should not use system partition!!!!!
+#	export PATH /sbin:/bin
 
-loglevel 3
+	export PATH /sbin:/system/bin
 
-# setup the global environment
-    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
-    export LD_LIBRARY_PATH /system/lib:/system/lib/egl
-    export ANDROID_BOOTLOGO 1
-    export ANDROID_ROOT /system
-    export ANDROID_ASSETS /system/app
-    export ANDROID_DATA /data
-    export EXTERNAL_STORAGE /sdcard
-    export BOOTCLASSPATH /system/framework/core.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/android.policy.jar:/system/framework/services.jar
-    export TMPDIR /data/local/tmp
+	export ANDROID_ROOT /system
+	export ANDROID_DATA /data
+	export EXTERNAL_STORAGE /sdcard
 
+	mkdir /sdcard
+	mkdir /system
+	mkdir /data
+	mkdir /cache
+	mkdir /efs
+	mount tmpfs nodev /tmp
 
-# Backward compatibility
-    symlink /system/etc /etc
-
-	
-# to enable wifi
-     setprop wifi.interface "eth0"
-# end of wifi
-	
-# +++++++++++++++++++++++++++++++++++++++++++
-# bootsnd
-    setprop audioflinger.bootsnd 1
-# end of bootsnd
-
-# Insert all modules here
-    mkdir /lib/modules
     insmod /lib/modules/fsr.ko
     insmod /lib/modules/fsr_stl.ko
     insmod /lib/modules/rfs_glue.ko
     insmod /lib/modules/rfs_fat.ko
-    insmod /lib/modules/j4fs.ko
-	#added by khoonk for parameter reading on 20100321
-	mount j4fs /dev/block/stl6 /mnt/.lfs
-	#added by khoonk for parameter reading on 20100321
-	insmod /lib/modules/param.ko
-	insmod /lib/modules/drop_caches.ko
 
-# create mountpoints and mount tmpfs on sqlite_stmt_journals
+    insmod /lib/modules/j4fs.ko
+    mount j4fs /dev/block/stl6 /mnt/.lfs
+    insmod /lib/modules/dpram.ko
+
+    insmod /lib/modules/param.ko
+    insmod /lib/modules/drop_caches.ko
+
     mkdir /sdcard 0000 system system
-    chown system system /sdcard
-    chmod 0000 /sdcard
-    mkdir /system
     mkdir /data 0771 system system
-    chown system system /data
-    chmod 0771 /data
-    mkdir /efs 0771 system system
     mkdir /cache 0770 system cache
 
+#    mount yaffs2 /dev/block/bml6 /system check=no
+# change st16 to 19
+#    mount rfs /dev/block/stl6 /system check=no
     mount rfs /dev/block/stl9 /system check=no
+#    mount yaffs2 /dev/block/bml7 /dbdata nosuid nodev check=no
+#    mount rfs /dev/block/stl7 /dbdata nosuid nodev xattr, check=no
+#    chown system system /dbdata
+#    chmod 0773 /dbdata
 
-#    mount yaffs2 mtd@system /system ro remount
+#    mount yaffs2 /dev/block/bml8 /cache nosuid nodev check=no
+#    mount rfs /dev/block/stl8 /cache nosuid nodev xattr, check=no
+#    chown system cache /cache
+#    chmod 0770 /cache
 
-    # We chown/chmod /data again so because mount is run as root + defaults
-##    mount yaffs2 mtd@userdata /data nosuid nodev
+    # mount yaffs2 /dev/block/bml4 /efs nosuid nodev
+#    mount rfs /dev/block/stl4 nosuid nodev xattr,check=no
+#    chown radio radio /efs
+#    chmod 0770 /efs
 
-#    mount rfs /dev/block/stl7 /data nosuid nodev check=no
-
-#    chown system system /data
-#    chmod 0771 /data
-
-###################################################################    
-# create SEC_INTERNAL_STORAGE 2/2   
-##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
-    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
+    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no    
     chown system system /data
     chmod 0771 /data
-   
-###################################################################  
+
+    # chown system system /cache/recovery
+    # chmod 0770 /cache/recovery
 
 
- #   chmod 0666 /dev/block/bml9
+    chmod 0666 /dev/block/bml9
 
 on boot
 #	write /sys/class/sec/switch/usb_sel PDA
@@ -87,11 +70,14 @@ on boot
 
 	class_start default
 
+	chown system system /sbin/busybox
 
+ service busybox /sbin/busybox --install -s
+ 	oneshot
 
 #service console /bin/sh
-#service console /system/bin/sh
-#    console
+service console /system/bin/sh
+    console
 
 on property:persist.service.adb.enable=1
     start adbd
