@@ -14,3 +14,170 @@ on boot
 service smdkc110-setup /system/etc/init.smdkc110.sh
     oneshot
 
+## Add this to system.prop	
+# to enable wifi
+     setprop wifi.interface "eth0"
+# end of wifi
+
+# Insert all modules here
+    mkdir /lib/modules
+    insmod /lib/modules/fsr.ko
+    insmod /lib/modules/fsr_stl.ko
+    insmod /lib/modules/rfs_glue.ko
+    insmod /lib/modules/rfs_fat.ko
+    insmod /lib/modules/j4fs.ko
+	#added by khoonk for parameter reading on 20100321
+	mount j4fs /dev/block/stl6 /mnt/.lfs
+	#added by khoonk for parameter reading on 20100321
+	insmod /lib/modules/param.ko
+	insmod /lib/modules/dpram.ko
+	insmod /lib/modules/multipdp.ko
+#	insmod /lib/modules/drop_caches.ko
+
+###################################################################    
+# create SEC_INTERNAL_STORAGE 1/2   
+    mkdir /userdata 0771 system system
+    chown system system /userdata
+    chmod 0771 /userdata
+###################################################################
+
+###################################################################    
+# create SEC_INTERNAL_STORAGE 2/2   
+##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
+    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
+    chown system system /data
+    chmod 0771 /data
+   
+##    To Add the partition in Movinand of T959
+    mkdir /data_tmo
+    mount rfs /dev/block/mmcblk0p3 /data_tmo nosuid nodev check=no
+    chown system system /data_tmo
+    chmod 0771 /data_tmo
+   
+###################################################################  
+
+###################################################################    
+# create dbdata partition
+mkdir /dbdata
+mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
+mkdir /dbdata/databases
+chown system system /dbdata
+chown system system /dbdata/databases
+chmod 0771 /dbdata
+chmod 0777 /dbdata/databases   
+###################################################################  
+
+# create data/gps for GPS demon
+	mkdir /data/gps
+	chown system /data/gps
+	chmod 771 /data/gps
+# GPS development for broadcom.    
+    #chmod 0777 /system/bin/gpsd/glgps_samsungJupiter
+    #chmod 0666 /system/lib/libgps.so
+    chmod 600 /system/etc/secgps.conf
+
+    # ko files for 3D
+    insmod /lib/modules/pvrsrvkm.ko
+    insmod /lib/modules/s3c_lcd.ko
+    insmod /lib/modules/s3c_bc.ko
+    #insmod /modules/bc_example.ko
+
+    # load FM Radio module
+    #insmod /lib/modules/Si4709_driver.ko
+    insmod /lib/modules/vibrator.ko
+    insmod /lib/modules/melfas_touchkey.ko
+
+# +++++++++++++++++++++++++++++++++++++++++++
+# for Bluetooth
+    chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
+    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
+    chown system system /sys/module/sco/parameters/disable_esco
+    chmod 0660 /sys/module/bluetooth_power/parameters/power
+    chmod 0660 /proc/bluetooth/sleep/proto
+
+    chown bluetooth bluetooth /dev/uinput
+    chmod 0666 /dev/uinput
+
+    chown bluetooth bluetooth /dev/s3c2410_serial0
+    chmod 0666 /dev/s3c2410_serial0
+    chmod 0777 /sys/class/rfkill/rfkill0/state
+    chmod 0777 /sys/class/rfkill/rfkill1/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state 
+
+    chmod 6777 /system/bin/brcm_dutMode
+# +++++++++++++++++++++++++++++++++++++++++++
+
+# 3D init
+service pvrsrvinit /system/bin/pvrsrvinit
+   user root
+   group root
+   oneshot
+
+#added for STE GPS
+service agpsd /system/bin/agpsd
+    user root
+    oneshot
+	
+# to enable wifi
+service wpa_supplicant /system/bin/wpa_supplicant -Dwext -ieth0 -c/data/wifi/bcm_supp.conf
+   disabled
+   oneshot
+
+#for WiFi MFG(TestMode)
+service wlservice /system/bin/wlservice
+    disabled
+    oneshot
+# end of wifi
+
+# +++++++++++++++++++++++++++++++++++++++++++
+# for Broadcom Bluetooth
+ # Start BTLD -----------------------------------------
+service btld /system/bin/logwrapper /system/bin/btld -hb 3000000 -hp /dev/s3c2410_serial0 -lpm 1
+    user root
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+# Start DTUN OBEXD  -----------------------------------------
+service obexd /system/bin/logwrapper /system/bin/obexd
+    #socket bluetooth stream 660 bluetooth bluetooth
+    #socket dbus_bluetooth stream 660 bluetooth bluetooth
+    # init.rc does not yet support applying capabilities, so run as root and
+    # let obexd drop uid to bluetooth with the right linux capabilities
+    user root
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+ # Start BLUETOOTHD  -----------------------------------------
+service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -n /etc/bluez/main.conf
+    socket bluetooth stream 660 bluetooth bluetooth
+    socket dbus_bluetooth stream 660 bluetooth bluetooth
+    # init.rc does not yet support applying capabilities, so run as root and
+    # let hcid drop uid to bluetooth with the right linux capabilities
+    group bluetooth net_bt_admin misc
+    disabled
+# +++++++++++++++++++++++++++++++++++++++++++
+
+#magnetic sensor yamaha
+service sensor-daemon /system/bin/sensorserver_yamaha
+user compass
+group system
+
+
+# to enable wifi
+on property:init.svc.wpa_supplicant=stopped
+    stop dhcpcd
+
+on property:init.svc.dhcpcd=stopped
+#    dhcpcd -k eth0
+# end of wifi
+
+# for Mobile AP
+service mobileAP /system/bin/wlp2pservice
+# end of Mobile AP
+
+# for TvOut
+service tvout /system/bin/tvoutserver
+user system
