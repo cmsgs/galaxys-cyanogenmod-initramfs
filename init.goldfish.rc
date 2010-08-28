@@ -50,3 +50,4 @@ service qemud /system/bin/qemud
 
 service goldfish-logcat /system/bin/logcat -Q
     oneshot
+
