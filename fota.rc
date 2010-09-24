@@ -16,79 +16,40 @@ on init
 	mkdir /efs
 	mount tmpfs nodev /tmp
 
-    insmod /lib/modules/fsr.ko
-    insmod /lib/modules/fsr_stl.ko
-    insmod /lib/modules/rfs_glue.ko
-    insmod /lib/modules/rfs_fat.ko
-
-    insmod /lib/modules/j4fs.ko
-    mount j4fs /dev/block/stl6 /mnt/.lfs
-    insmod /lib/modules/dpram.ko
-
-    insmod /lib/modules/param.ko
-    insmod /lib/modules/drop_caches.ko
-
-    mkdir /sdcard 0000 system system
-    mkdir /data 0771 system system
-    mkdir /cache 0770 system cache
-
-#    mount yaffs2 /dev/block/bml6 /system check=no
-# change st16 to 19
-#    mount rfs /dev/block/stl6 /system check=no
-    mount rfs /dev/block/stl9 /system check=no
-#    mount yaffs2 /dev/block/bml7 /dbdata nosuid nodev check=no
-#    mount rfs /dev/block/stl7 /dbdata nosuid nodev xattr, check=no
-#    chown system system /dbdata
-#    chmod 0773 /dbdata
-
-#    mount yaffs2 /dev/block/bml8 /cache nosuid nodev check=no
-#    mount rfs /dev/block/stl8 /cache nosuid nodev xattr, check=no
-#    chown system cache /cache
-#    chmod 0770 /cache
-
-    # mount yaffs2 /dev/block/bml4 /efs nosuid nodev
-#    mount rfs /dev/block/stl4 nosuid nodev xattr,check=no
-#    chown radio radio /efs
-#    chmod 0770 /efs
-
-    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no    
-    chown system system /data
-    chmod 0771 /data
-
-    # chown system system /cache/recovery
-    # chmod 0770 /cache/recovery
-
-
-    chmod 0666 /dev/block/bml9
+	insmod /lib/modules/fsr.ko
+	insmod /lib/modules/fsr_stl.ko
+	insmod /lib/modules/rfs_glue.ko
+	insmod /lib/modules/rfs_fat.ko
+ 
+	insmod /lib/modules/j4fs.ko
+	mount j4fs /dev/block/stl6 /mnt/.lfs
+	insmod /lib/modules/dpram.ko
+ 
+	insmod /lib/modules/param.ko 
+	 
+	mkdir /sdcard 0000 system system
+	mkdir /data 0771 system system
+	mkdir /cache 0770 system cache
+ 
+	mount rfs /dev/block/stl3 /efs nosuid nodev check=no
+  	mount rfs /dev/block/stl9 /system check=no
 
 on boot
 #	write /sys/class/sec/switch/usb_sel PDA
 
-    ifup lo
-    hostname localhost
-    domainname localdomain
+	ifup lo
+	hostname localhost
+	domainname localdomain
 
 	class_start default
 
-	chown system system /sbin/busybox
+service recovery /sbin/recovery
 
- service busybox /sbin/busybox --install -s
- 	oneshot
-
-#service console /bin/sh
-service console /system/bin/sh
-    console
+service adbd /sbin/adbd recovery
 
 on property:persist.service.adb.enable=1
-    start adbd
+	start adbd
 
 on property:persist.service.adb.enable=0
-    stop adbd  
+	stop adbd
 
-service vold /system/bin/vold
-    socket vold stream 0660 root mount
-
-service redbend_ua /sbin/redbend_ua all
-    oneshot
-
-#service adbd /sbin/adbd redbend_ua all

@@ -6,7 +6,7 @@ sysclktz 0
 loglevel 3
 
 # setup the global environment
-    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
+    export PATH /sbin:/system/sbin:/bin:/system/bin:/system/xbin
     export LD_LIBRARY_PATH /system/lib:/system/lib/egl
     export ANDROID_BOOTLOGO 1
     export ANDROID_CACHE /cache
@@ -77,9 +77,9 @@ loglevel 3
     mkdir /sd-ext 0771 system system
     
 # create SEC_INTERNAL_STORAGE 1/2   
-    mkdir /userdata 0771 system system
-    chown system system /userdata
-    chmod 0771 /userdata
+  #  mkdir /userdata 0771 system system
+ #   chown system system /userdata
+#    chmod 0771 /userdata
 
 #    mount rootfs rootfs / ro remount
 
@@ -122,19 +122,19 @@ loglevel 3
    
 # create SEC_INTERNAL_STORAGE 2/2
 ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
-    mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
+    mount rfs /dev/block/stl10 /data nosuid nodev check=no
     chown system system /data
     chmod 0771 /data
    
 ##    To Add the partition in Movinand of T959
-    mkdir /mnt/sdcard/tmo
-    mount rfs /dev/block/mmcblk0p3 /mnt/sdcard/tmo nosuid nodev check=no
-    chown system system /mnt/sdcard/tmo
-    chmod 0771 /mnt/sdcard/tmo
+    ##mkdir /mnt/sdcard/tmo
+  ##  mount rfs /dev/block/mmcblk0p3 /mnt/sdcard/tmo nosuid nodev check=no
+  ##  chown system system /mnt/sdcard/tmo
+    ##chmod 0771 /mnt/sdcard/tmo
 
 # create dbdata partition
     mkdir /dbdata
-    mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
+ #   mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
     mkdir /dbdata/databases
     chown system system /dbdata
     chown system system /dbdata/databases
