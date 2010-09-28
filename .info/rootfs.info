@@ -1,6 +1,6 @@
 [PLATFORM_INFO]
 platform_name = Android;
-platform_hw = aries rev03;
+platform_hw = aries rev02;
 [COMPILE_INFO]
 compile_time = 2010-06-01 18:58:34;
 compiled_by  = umts_scm;
