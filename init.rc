@@ -522,7 +522,7 @@ service debuggerd /system/bin/debuggerd
 
 service efs-daemon /system/bin/efsd
 
-service ril-daemon /system/bin/rild
+service ril-daemon /system/bin/rild  -l /system/lib/libsec-ril.so -- -d /dev/ttyS0
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
     user root
