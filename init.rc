@@ -311,9 +311,9 @@ loglevel 3
     chmod 0777 /dev/usb_mtp_gadget
 
     # ko files for 3D
-    insmod /lib/modules/pvrsrvkm.ko
-    insmod /lib/modules/s3c_lcd.ko
-    insmod /lib/modules/s3c_bc.ko
+    insmod /modules/pvrsrvkm.ko
+    insmod /modules/s3c_lcd.ko
+    insmod /modules/s3c_bc.ko
     #insmod /modules/bc_example.ko
 
     # load FM Radio module
@@ -378,7 +378,7 @@ on boot
 
     chmod 666 /system/usr/keychars/s3c-keypad.kcm.bin 
 
-    # Permissions for System Server and daemons.
+  # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
     chown radio system /sys/android_power/request_state
     chown radio system /sys/android_power/acquire_full_wake_lock
@@ -387,39 +387,35 @@ on boot
     chown radio system /sys/power/state
     chown radio system /sys/power/wake_lock
     chown radio system /sys/power/wake_unlock
-    chown radio system /sys/camera_led_status/led_ril_status
-    chown system system /sys/camera_led_status/led_wimax_status
-    chown system system /sys/camera_led_status/led_hotspot_status
-    chown media system /sys/android_camera/cam_mode
+	chown radio system /sys/power/dvfslock_ctrl     
     chmod 0660 /sys/power/state
     chmod 0660 /sys/power/wake_lock
     chmod 0660 /sys/power/wake_unlock
+	chmod 0660 /sys/power/dvfslock_ctrl    		
     chown system system /sys/class/timed_output/vibrator/enable
+    chmod 0777 /sys/class/timed_output/vibrator/enable
     chown system system /sys/class/leds/keyboard-backlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
     chown system system /sys/class/leds/button-backlight/brightness
     chown system system /sys/class/leds/jogball-backlight/brightness
-    chown system system /sys/class/leds/vtkey-backlight/brightness
-    chown system system /sys/class/leds/caps/brightness
-    chown system system /sys/class/leds/func/brightness
     chown system system /sys/class/leds/red/brightness
-    chown system system /sys/class/leds/green/brightness
+#    chown system system /sys/class/leds/green/brightness
     chown system system /sys/class/leds/blue/brightness
-    chown system system /sys/class/leds/amber/brightness
-    chown system system /sys/class/leds/red/device/grpfreq
-    chown system system /sys/class/leds/red/device/grppwm
-    chown system system /sys/class/leds/red/device/blink
-    chown system system /sys/class/leds/red/brightness
-    chown system system /sys/class/leds/green/brightness
-    chown system system /sys/class/leds/blue/brightness
-    chown system system /sys/class/leds/red/device/grpfreq
-    chown system system /sys/class/leds/red/device/grppwm
-    chown system system /sys/class/leds/red/device/blink
-    chown system system /sys/class/leds/green/blink
-    chown system system /sys/class/leds/green/off_timer
-    chown system system /sys/class/leds/amber/blink
-    chown system system /sys/class/leds/amber/off_timer
-    chown system system /sys/class/timed_output/vibrator/enable
+    chown system system /sys/class/leds/red/trigger
+    chown system system /sys/class/leds/blue/trigger
+    chown system system /sys/class/leds/red/delay_on
+    chown system system /sys/class/leds/red/delay_off
+    chown system system /sys/class/leds/blue/delay_on
+    chown system system /sys/class/leds/blue/delay_off
+#    chown system system /sys/class/leds/red/device/grpfreq
+#    chown system system /sys/class/leds/red/device/grppwm
+#    chown system system /sys/class/leds/red/device/blink
+#    chown system system /sys/class/leds/red/brightness
+#    chown system system /sys/class/leds/green/brightness
+#    chown system system /sys/class/leds/blue/brightness
+#    chown system system /sys/class/leds/red/device/grpfreq
+#    chown system system /sys/class/leds/red/device/grppwm
+#    chown system system /sys/class/leds/red/device/blink
     chown system system /sys/module/sco/parameters/disable_esco
     chown system system /sys/kernel/ipv4/tcp_wmem_min
     chown system system /sys/kernel/ipv4/tcp_wmem_def
@@ -427,6 +423,10 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_min
     chown system system /sys/kernel/ipv4/tcp_rmem_def
     chown system system /sys/kernel/ipv4/tcp_rmem_max
+    chown root radio /proc/cmdline
+    chown system system /sys/devices/platform/s3c-keypad/key_pressed
+    chmod 0777 /sys/devices/platform/s3c-keypad/key_pressed
+
     chown root radio /proc/cmdline
 
     # magnetic sensor yamaha
@@ -447,7 +447,9 @@ on boot
     setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
-
+#Define modem related settings
+    setprop ro.radio.use-ppp yes
+	
     # for Bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /proc/bluetooth/sleep/proto
@@ -511,8 +513,11 @@ service servicemanager /system/bin/servicemanager
 
 service vold /system/bin/vold
     socket vold stream 0660 root mount
-
-service nexus /system/bin/nexus
+ # crash fix thanks littlejth!
+service netd /system/bin/netd
+     socket netd stream 0660 root system
+# end of random reboot
+	 service nexus /system/bin/nexus
     socket nexus stream 0660 root system
     disabled
 #service mountd /system/bin/mountd
@@ -522,7 +527,7 @@ service debuggerd /system/bin/debuggerd
 
 service efs-daemon /system/bin/efsd
 
-service ril-daemon /system/bin/rild  -l /system/lib/libsec-ril.so -- -d /dev/ttyS0
+service ril-daemon /system/bin/rild
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
     user root
@@ -536,12 +541,6 @@ service ril-daemon /system/bin/rild  -l /system/lib/libsec-ril.so -- -d /dev/tty
 service agpsd /system/bin/agpsd
     user root
     oneshot
-
-service DR-daemon /system/bin/drexe
-    user root
-
-service mobex-daemon /system/bin/npsmobex
-    user root
 
 service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
     socket zygote stream 666
@@ -579,6 +578,10 @@ service ifcfg_eth0 /system/bin/ifconfig eth0 up
     disabled
     oneshot
 #for WiFi MFG(TestMode)
+#SecFeatue.CDMA_WIFI
+service mfgloader /system/bin/mfgloader
+    disabled
+    oneshot
 service wlservice /system/bin/wlservice
     disabled
     oneshot
@@ -685,7 +688,7 @@ on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
 
 on property:init.svc.dhcpcd=stopped
-#    dhcpcd -k eth0
+    dhcpcd -k eth0
 # end of wifi
 
 # for Mobile AP
