@@ -568,7 +568,7 @@
     service pppd_cdma /system/bin/pppd_runner
        user root
        group radio cache inet misc system
-       disabled
+       oneshot
        
     service bootanim /system/bin/bootanimation
         user graphics
