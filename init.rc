@@ -700,6 +700,8 @@
      
     on property:init.svc.dhcpcd=stopped
         dhcpcd -k eth0
+		start pppd_cdma
+
     # end of wifi
      
     # for Mobile AP
