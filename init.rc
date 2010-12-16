@@ -608,22 +608,10 @@
     # +++++++++++++++++++++++++++++++++++++++++++
     # for Broadcom Bluetooth
      # Start BTLD -----------------------------------------
-    service btld /system/bin/logwrapper /system/bin/btld -hb 3000000 -hp /dev/s3c2410_serial0 -lpm 1
-        user root
-        group bluetooth net_bt_admin
-        disabled
-        oneshot
-     
-    # Start DTUN OBEXD  -----------------------------------------
-    service obexd /system/bin/logwrapper /system/bin/obexd
-        #socket bluetooth stream 660 bluetooth bluetooth
-        #socket dbus_bluetooth stream 660 bluetooth bluetooth
-        # init.rc does not yet support applying capabilities, so run as root and
-        # let obexd drop uid to bluetooth with the right linux capabilities
-        user root
-        group bluetooth net_bt_admin
-        disabled
-        oneshot
+service hciattach /system/bin/brcm_patchram_plus -d --enable_hci --baudrate 3000000 --patchram /system/bin/BCM4329B1_002.002.023.0417.0430.hcd /dev/s3c2410_serial0
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
      
     service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -n /etc/bluez/main.conf
         socket bluetooth stream 660 bluetooth bluetooth
