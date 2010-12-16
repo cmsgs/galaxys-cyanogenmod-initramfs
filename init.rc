@@ -600,6 +600,8 @@
      
     service dbus /system/bin/dbus-daemon --system --nofork
         socket dbus stream 660 bluetooth bluetooth
+		 socket bluetooth stream 660 bluetooth bluetooth
+        socket dbus_bluetooth stream 660 bluetooth bluetooth
         user bluetooth
         group bluetooth net_bt_admin
      
