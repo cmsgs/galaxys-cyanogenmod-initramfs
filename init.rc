@@ -726,6 +726,9 @@ service hciattach /system/bin/brcm_patchram_plus -d --enable_hci --baudrate 3000
             disabled
             oneshot
            
-    on property:net.cdma.provision=true
+    on property:net.cdma.data_ready=true
         start pppd_cdma
+
+    on property:net.cdma.data_ready=false
+        stop pppd_cdma
 
