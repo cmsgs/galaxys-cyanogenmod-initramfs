@@ -258,7 +258,15 @@
         chmod 0771 /data/misc/wifi/sockets
         chmod 0664 /system/etc/wifi/wpa_supplicant.conf
     # end of wifi
-     
+    
+	#camera fix thanks skeeterslint
+	 chmod 666 /dev/video0
+	 chmod 666 /dev/video1
+	 chmod 666 /dev/video14
+	 chmod 666 /dev/video2
+	 chmod 666 /dev/video21
+	 chmod 666 /dev/video22
+
         mkdir /data/local 0771 shell shell
         chown shell shell /data/local
         chmod 0771 /data/local
