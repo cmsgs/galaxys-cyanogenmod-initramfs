@@ -600,8 +600,7 @@ service sysinit /system/bin/logwrapper /system/xbin/busybox run-parts /system/et
        oneshot
      
     service dhcpcd /system/bin/dhcpcd eth0
-      setprop net.dns1 8.8.8.8
-	    setprop net.dns2 8.8.4.4
+
 	  disabled
        oneshot
      
@@ -743,4 +742,7 @@ service hciattach /system/bin/brcm_patchram_plus -d --enable_hci --baudrate 3000
 
     on property:net.cdma.data_ready=false
         stop pppd_cdma
-
+		
+    on property:dhcp.eth0.result=ok
+      setprop net.dns1 8.8.8.8
+	    setprop net.dns2 8.8.4.4	
