@@ -523,6 +523,9 @@
     on property:persist.service.adb.enable=0
         stop adbd
      
+	 # Execute files in /system/etc/init.d
+service sysinit /system/bin/logwrapper /system/xbin/busybox run-parts /system/etc/init.d
+    oneshot
     # 3D init
     service pvrsrvinit /system/bin/pvrsrvinit
        user root
