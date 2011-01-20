@@ -15,7 +15,8 @@
         export EXTERNAL_STORAGE /mnt/sdcard
         export ASEC_MOUNTPOINT /mnt/asec
         export SD_EXT_DIRECTORY /sd-ext
-        export BOOTCLASSPATH /system/framework/core.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/android.policy.jar:/system/framework/services.jar
+		export BOOTCLASSPATH /system/framework/core.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/core-junit.jar
+		export LOOP_MOUNTPOINT /mnt/obb 
         export TMPDIR /data/local/tmp
         export TERMINFO /system/etc/terminfo
      
@@ -70,8 +71,11 @@
      
     # Backwards Compat - XXX: Going away in G*
         symlink /mnt/sdcard /sdcard
-     
-        mkdir /system
+    # Filesystem image public mount points.
+    mkdir /mnt/obb 0700 root system
+    mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
+
+		mkdir /system
         mkdir /data 0771 system system
         mkdir /cache 0771 system cache
         mkdir /config 0500 root root
@@ -274,6 +278,11 @@
 	 chmod 666 /dev/video21
 	 chmod 666 /dev/video22
 
+	    #change permissions on kmsg & sysrq-trigger so bugreports can grab kthread stacks
+		chown root system /proc/kmsg
+		chmod 0440 /proc/kmsg
+		chown root system /proc/sysrq-trigger
+		chmod 0220 /proc/sysrq-trigger	 
         mkdir /data/local 0771 shell shell
         chown shell shell /data/local
         chmod 0771 /data/local
@@ -363,31 +372,33 @@
         write /sys/devices/virtual/net/rmnet0/timeout_suspend 5000000
      
     # Define the oom_adj values for the classes of processes that can be
-    # killed by the kernel.  These are used in ActivityManagerService.
-        setprop ro.FOREGROUND_APP_ADJ 0
-        setprop ro.VISIBLE_APP_ADJ 1
-        setprop ro.SECONDARY_SERVER_ADJ 2
-        setprop ro.BACKUP_APP_ADJ 2
-        setprop ro.HOME_APP_ADJ 4
-        setprop ro.HIDDEN_APP_MIN_ADJ 7
-        setprop ro.CONTENT_PROVIDER_ADJ 14
-        setprop ro.EMPTY_APP_ADJ 15
-     
-    # Define the memory thresholds at which the above process classes will
-    # be killed.  These numbers are in pages (4k).
-        setprop ro.FOREGROUND_APP_MEM 1536
-        setprop ro.VISIBLE_APP_MEM 2048
-        setprop ro.SECONDARY_SERVER_MEM 4096
-        setprop ro.BACKUP_APP_MEM 4096
-        setprop ro.HOME_APP_MEM 4096
-        setprop ro.HIDDEN_APP_MEM 5120
-        setprop ro.CONTENT_PROVIDER_MEM 5632
-        setprop ro.EMPTY_APP_MEM 6144
-     
-    # Write value must be consistent with the above properties.
-    # Note that the driver only supports 6 slots, so we have HOME_APP at the
-    # same memory level as services.
-        write /sys/module/lowmemorykiller/parameters/adj 0,1,2,7,14,15
+# killed by the kernel. These are used in ActivityManagerService.
+    setprop ro.FOREGROUND_APP_ADJ 0
+    setprop ro.VISIBLE_APP_ADJ 1
+    setprop ro.PERCEPTIBLE_APP_ADJ 2
+    setprop ro.HEAVY_WEIGHT_APP_ADJ 3
+    setprop ro.SECONDARY_SERVER_ADJ 4
+    setprop ro.BACKUP_APP_ADJ 5
+    setprop ro.HOME_APP_ADJ 6
+    setprop ro.HIDDEN_APP_MIN_ADJ 7
+    setprop ro.EMPTY_APP_ADJ 15
+
+# Define the memory thresholds at which the above process classes will
+# be killed. These numbers are in pages (4k).
+    setprop ro.FOREGROUND_APP_MEM 2048
+    setprop ro.VISIBLE_APP_MEM 3072
+    setprop ro.PERCEPTIBLE_APP_MEM 4096
+    setprop ro.HEAVY_WEIGHT_APP_MEM 4096
+    setprop ro.SECONDARY_SERVER_MEM 6144
+    setprop ro.BACKUP_APP_MEM 6144
+    setprop ro.HOME_APP_MEM 6144
+    setprop ro.HIDDEN_APP_MEM 7168
+    setprop ro.EMPTY_APP_MEM 8192
+
+# Write value must be consistent with the above properties.
+# Note that the driver only supports 6 slots, so we have HOME_APP at the
+# same memory level as services.
+    write /sys/module/lowmemorykiller/parameters/adj 0,1,2,7,7,15
      
         write /proc/sys/vm/overcommit_memory 1
         write /proc/sys/vm/min_free_order_shift 4
@@ -508,6 +519,9 @@
      
     service console /system/bin/sh
         console
+		 disabled
+		 user shell
+    group log
      
     # adbd is controlled by the persist.service.adb.enable system property
     service adbd /sbin/adbd
