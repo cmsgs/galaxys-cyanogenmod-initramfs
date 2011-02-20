@@ -318,7 +318,9 @@
         mkdir /cache/dalvik-cache 0771 system system
         chown system system /cache/dalvik-cache
         chmod 0771 /cache/dalvik-cache
-     
+         # video play for m.youtube.com
+    mkdir /data/data/.youtube 0777
+	 
         # create the lost+found directories, so as to enforce our permissions
         mkdir /data/lost+found 0770
         mkdir /cache/lost+found 0770
