@@ -467,6 +467,34 @@
         chown system system /dev/proximity
         chmod 0777 /dev/proximity
         chmod 0777 /dev/hac_miscdev
+		 # for Sensor HAL
+ 
+     chown system system /dev/accelerometer
+    chown compass system /dev/accel
+    chown compass system /dev/compass
+     chown system system /dev/akm8973_daemon
+     chown system system /dev/akm8973_aot
+#   chown system system /dev/bma020
+#   chown system system /dev/proximity
+     chown system system /dev/light
+#   chmod 0777 /dev/accelerometer
+     chmod 0777 /dev/akm8973_daemon
+     chmod 0777 /dev/akm8973_aot
+#   chmod 0777 /dev/bma020
+#   chmod 0777 /dev/proximity
+#    chmod 0660 /dev/light
+ 
+#magnetic sensor yamaha
+#   chown compass system /dev/i2c-12
+#   chown compass system /dev/i2c-5
+
+     
+#   chown system system /dev/bma020
+    chmod 0777 /dev/akm8973_daemon
+    chmod 0777 /dev/akm8973_aot
+#   chmod 0777 /dev/bma020
+		
+		
      
     # Define TCP buffer sizes for various networks
     #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
